@@ -345,19 +345,20 @@ const photos = [
     src: deblaImg,
     tag: 'Blessing · دعاء وبركة',
     title: 'A Blessed Beginning',
-    caption: 'على كتاب الله وسُنة رسوله، دعوات ترعى بداية حكايتنا — In faith and prayers, our journey begins',
+    caption: 'Here\'s to love, laughter, and a lifetime together',
+
   },
   {
     src: hand1Img,
     tag: 'Together · فرحة العمر',
     title: 'Bahaa & Eman',
-    caption: 'ابتسامة العمر وفرحة تكتمل بكم.. معاً نحو غدٍ أجمل — Two hearts radiating love and everlasting joy',
+    caption: 'Two hearts radiating love and everlasting joy',
   },
   {
     src: personImg,
     tag: 'The Rings · عهد المحبة',
     title: 'اليوم وغدًا وإلى الأبد',
-    caption: 'رمز العهد والميثاق وتاريخ محفور في الوجدان (14/8/2026) — Today, tomorrow, and forever together',
+    caption: ' (14/8/2026) — Today, tomorrow, and forever together',
   },
 ]
 
