@@ -17,7 +17,7 @@
           <!-- Front Face: Venue & Interactive Map -->
           <div class="flip-card__face flip-card__front">
             <div class="flip-card__front-inner">
-              <span class="flip-card__tag">Engagement Party</span>
+              <span class="flip-card__tag">Engagement Party · 7:00 PM</span>
               <h3 class="flip-card__venue-title">Cicada Hall</h3>
               <p class="flip-card__venue-location">Armed Forces Club · Zamalek, Cairo</p>
 

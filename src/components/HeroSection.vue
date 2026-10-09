@@ -35,6 +35,10 @@
         23 &nbsp;|&nbsp; 10 &nbsp;|&nbsp; 2026
       </p>
 
+      <p class="hero__time" :class="{ 'hero__animate': animate }" style="--delay: 0.78s">
+        Friday · 7:00 PM
+      </p>
+
       <div class="hero__badge-wrap" :class="{ 'hero__animate': animate }" style="--delay: 0.85s">
         <p class="hero__venue-hint">
           Request the honour of your presence at our engagement
@@ -236,6 +240,19 @@ onMounted(() => {
   letter-spacing: 0.24em;
   color: #4a141a;
   text-shadow: 0 1px 8px rgba(255, 255, 255, 0.95);
+  opacity: 0;
+  transform: translateY(10px);
+  margin-bottom: 0.25rem;
+}
+
+.hero__time {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-gold-dark);
+  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.9);
   opacity: 0;
   transform: translateY(10px);
   margin-bottom: 0.55rem;

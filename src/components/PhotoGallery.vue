@@ -1,5 +1,18 @@
 <template>
   <section class="gallery-section" id="gallery">
+    <!-- Gentle floating background petals -->
+    <div class="gallery-petals" aria-hidden="true">
+      <span v-for="p in 6" :key="'petal-'+p" class="gallery-petal" :style="petalStyle(p)">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+          <path d="M12 2 C 16 6, 20 11, 16 17 C 12 21, 6 19, 4 14 C 2 9, 7 4, 12 2 Z"
+            fill="rgba(224, 185, 188, 0.45)"
+            stroke="rgba(196, 148, 155, 0.35)"
+            stroke-width="0.7"/>
+          <path d="M12 5 C 13 9, 12 14, 9 17" stroke="rgba(240, 215, 218, 0.6)" stroke-width="0.5" fill="none"/>
+        </svg>
+      </span>
+    </div>
+
     <div class="gallery-section__inner">
       <!-- Section Header -->
       <div class="gallery-section__header">
@@ -8,14 +21,216 @@
 
         <svg class="gallery-section__divider" viewBox="0 0 200 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0 10 Q25 0 50 10 Q75 20 100 10 Q125 0 150 10 Q175 20 200 10" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
-          <circle cx="100" cy="10" r="3" fill="currentColor" opacity="0.6"/>
+          <!-- Delicate Rosebud Centerpiece in Divider -->
+          <g transform="translate(100, 10)">
+            <circle cx="0" cy="0" r="3.5" fill="var(--color-gold)" opacity="0.9"/>
+            <path d="M-2 -1 C-2 -3, 2 -3, 2 -1 C2 1, -1 2, 0 0" stroke="#5c1d24" stroke-width="0.6" fill="none"/>
+          </g>
           <line x1="60" y1="10" x2="85" y2="10" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
           <line x1="115" y1="10" x2="140" y2="10" stroke="currentColor" stroke-width="0.5" opacity="0.4"/>
         </svg>
       </div>
 
-      <!-- Main Showcase Card with 3D Tilt & Glassmorphism -->
-      <div class="gallery-card" @mouseenter="pauseAutoplay" @mouseleave="startAutoplay">
+      <!-- Wrapper for Showcase Card with Corner Florals -->
+      <div class="gallery-card-wrapper">
+        <!-- Top Left Corner Floral -->
+        <svg class="gallery-floral gallery-floral--tl" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="goldFloraGradTL" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#d4af37" stop-opacity="0.95"/>
+              <stop offset="60%" stop-color="#c59b6d" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#e8c4c8" stop-opacity="0.9"/>
+            </linearGradient>
+            <radialGradient id="petalGlowTL" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#fdf2f4" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#d99b9e" stop-opacity="0.6"/>
+            </radialGradient>
+          </defs>
+          <!-- Branch -->
+          <path d="M6 84 C 18 52, 42 24, 84 8" stroke="url(#goldFloraGradTL)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M32 54 C 20 42, 16 28, 22 16 C 26 24, 30 36, 36 44" stroke="url(#goldFloraGradTL)" stroke-width="0.9" fill="rgba(216, 200, 184, 0.2)"/>
+          <path d="M50 36 C 42 22, 48 12, 58 14 C 58 22, 54 30, 50 36Z" fill="rgba(216, 200, 184, 0.25)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <path d="M22 66 C 10 68, 6 60, 10 52 C 16 56, 20 62, 22 66Z" fill="rgba(216, 200, 184, 0.22)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <path d="M68 20 C 72 8, 82 8, 84 14 C 80 20, 74 20, 68 20Z" fill="rgba(216, 200, 184, 0.22)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <!-- Central Rose -->
+          <g transform="translate(36, 38)">
+            <path d="M-9 -3 C-10 -11, 4 -12, 8 -4 C12 4, -4 12, -9 -3Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+            <path d="M-4 -8 C4 -12, 12 -4, 8 4 C3 10, -8 6, -4 -8Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+            <path d="M-3 -2 C-3 -6, 3 -6, 3 -2 C3 2, -1 3, -1 1 C-1 0, 1 0, 1 -1" stroke="#8b4a52" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+            <circle cx="0" cy="0" r="2.2" fill="#e8b8be"/>
+          </g>
+          <!-- Buds -->
+          <g transform="translate(74, 12)">
+            <path d="M0 6 C-4 2, -2 -3, 2 -4 C6 -2, 5 3, 0 6Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          </g>
+          <g transform="translate(18, 20)">
+            <path d="M0 5 C-3 2, -2 -2, 1 -3 C4 -1, 3 3, 0 5Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          </g>
+        </svg>
+
+        <!-- Top Right Corner Floral -->
+        <svg class="gallery-floral gallery-floral--tr" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 84 C 18 52, 42 24, 84 8" stroke="url(#goldFloraGradTL)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M32 54 C 20 42, 16 28, 22 16 C 26 24, 30 36, 36 44" stroke="url(#goldFloraGradTL)" stroke-width="0.9" fill="rgba(216, 200, 184, 0.2)"/>
+          <path d="M50 36 C 42 22, 48 12, 58 14 C 58 22, 54 30, 50 36Z" fill="rgba(216, 200, 184, 0.25)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <path d="M22 66 C 10 68, 6 60, 10 52 C 16 56, 20 62, 22 66Z" fill="rgba(216, 200, 184, 0.22)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <path d="M68 20 C 72 8, 82 8, 84 14 C 80 20, 74 20, 68 20Z" fill="rgba(216, 200, 184, 0.22)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <g transform="translate(36, 38)">
+            <path d="M-9 -3 C-10 -11, 4 -12, 8 -4 C12 4, -4 12, -9 -3Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+            <path d="M-4 -8 C4 -12, 12 -4, 8 4 C3 10, -8 6, -4 -8Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+            <path d="M-3 -2 C-3 -6, 3 -6, 3 -2 C3 2, -1 3, -1 1 C-1 0, 1 0, 1 -1" stroke="#8b4a52" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+            <circle cx="0" cy="0" r="2.2" fill="#e8b8be"/>
+          </g>
+          <g transform="translate(74, 12)">
+            <path d="M0 6 C-4 2, -2 -3, 2 -4 C6 -2, 5 3, 0 6Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          </g>
+          <g transform="translate(18, 20)">
+            <path d="M0 5 C-3 2, -2 -2, 1 -3 C4 -1, 3 3, 0 5Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          </g>
+        </svg>
+
+        <!-- Bottom Left Corner Floral -->
+        <svg class="gallery-floral gallery-floral--bl" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 84 C 18 52, 42 24, 84 8" stroke="url(#goldFloraGradTL)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M32 54 C 20 42, 16 28, 22 16 C 26 24, 30 36, 36 44" stroke="url(#goldFloraGradTL)" stroke-width="0.9" fill="rgba(216, 200, 184, 0.2)"/>
+          <path d="M50 36 C 42 22, 48 12, 58 14 C 58 22, 54 30, 50 36Z" fill="rgba(216, 200, 184, 0.25)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <path d="M22 66 C 10 68, 6 60, 10 52 C 16 56, 20 62, 22 66Z" fill="rgba(216, 200, 184, 0.22)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <path d="M68 20 C 72 8, 82 8, 84 14 C 80 20, 74 20, 68 20Z" fill="rgba(216, 200, 184, 0.22)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <g transform="translate(36, 38)">
+            <path d="M-9 -3 C-10 -11, 4 -12, 8 -4 C12 4, -4 12, -9 -3Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+            <path d="M-4 -8 C4 -12, 12 -4, 8 4 C3 10, -8 6, -4 -8Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+            <path d="M-3 -2 C-3 -6, 3 -6, 3 -2 C3 2, -1 3, -1 1 C-1 0, 1 0, 1 -1" stroke="#8b4a52" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+            <circle cx="0" cy="0" r="2.2" fill="#e8b8be"/>
+          </g>
+          <g transform="translate(74, 12)">
+            <path d="M0 6 C-4 2, -2 -3, 2 -4 C6 -2, 5 3, 0 6Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          </g>
+          <g transform="translate(18, 20)">
+            <path d="M0 5 C-3 2, -2 -2, 1 -3 C4 -1, 3 3, 0 5Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          </g>
+        </svg>
+
+        <!-- Bottom Right Corner Floral -->
+        <svg class="gallery-floral gallery-floral--br" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 84 C 18 52, 42 24, 84 8" stroke="url(#goldFloraGradTL)" stroke-width="1.3" stroke-linecap="round"/>
+          <path d="M32 54 C 20 42, 16 28, 22 16 C 26 24, 30 36, 36 44" stroke="url(#goldFloraGradTL)" stroke-width="0.9" fill="rgba(216, 200, 184, 0.2)"/>
+          <path d="M50 36 C 42 22, 48 12, 58 14 C 58 22, 54 30, 50 36Z" fill="rgba(216, 200, 184, 0.25)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <path d="M22 66 C 10 68, 6 60, 10 52 C 16 56, 20 62, 22 66Z" fill="rgba(216, 200, 184, 0.22)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <path d="M68 20 C 72 8, 82 8, 84 14 C 80 20, 74 20, 68 20Z" fill="rgba(216, 200, 184, 0.22)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          <g transform="translate(36, 38)">
+            <path d="M-9 -3 C-10 -11, 4 -12, 8 -4 C12 4, -4 12, -9 -3Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+            <path d="M-4 -8 C4 -12, 12 -4, 8 4 C3 10, -8 6, -4 -8Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+            <path d="M-3 -2 C-3 -6, 3 -6, 3 -2 C3 2, -1 3, -1 1 C-1 0, 1 0, 1 -1" stroke="#8b4a52" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+            <circle cx="0" cy="0" r="2.2" fill="#e8b8be"/>
+          </g>
+          <g transform="translate(74, 12)">
+            <path d="M0 6 C-4 2, -2 -3, 2 -4 C6 -2, 5 3, 0 6Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          </g>
+          <g transform="translate(18, 20)">
+            <path d="M0 5 C-3 2, -2 -2, 1 -3 C4 -1, 3 3, 0 5Z" fill="url(#petalGlowTL)" stroke="url(#goldFloraGradTL)" stroke-width="0.8"/>
+          </g>
+        </svg>
+
+        <!-- Floating Delicate Flowers on LEFT side -->
+        <div class="gallery-flock gallery-flock--left" aria-hidden="true">
+          <!-- Flower L1: Blooming Rose -->
+          <div class="drifting-flower drifting-flower--l1">
+            <svg class="flower-svg" viewBox="0 0 36 36" fill="none">
+              <path d="M10 24 C 4 23, 2 17, 6 12 C 11 15, 12 21, 10 24 Z" fill="rgba(196, 175, 150, 0.55)" stroke="#bfa37e" stroke-width="0.6"/>
+              <circle cx="18" cy="18" r="11" fill="rgba(252, 236, 238, 0.95)" stroke="#d4af37" stroke-width="0.8"/>
+              <path d="M12 16 C 11 10, 19 9, 21 14 C 25 10, 28 16, 26 20 C 28 25, 22 28, 19 25 C 14 28, 10 23, 12 19 Z" fill="rgba(240, 198, 203, 0.92)" stroke="#c48b92" stroke-width="0.6"/>
+              <path d="M15 17 C 15 14, 21 14, 21 17 C 21 20, 17 21, 17 19 C 17 18, 19 18, 19 17" stroke="#8b3a44" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+              <circle cx="18" cy="18" r="1.8" fill="#d4af37"/>
+            </svg>
+          </div>
+
+          <!-- Flower L2: Rosebud with Stem -->
+          <div class="drifting-flower drifting-flower--l2">
+            <svg class="flower-svg" viewBox="0 0 32 32" fill="none">
+              <path d="M8 28 C 12 24, 15 20, 18 16" stroke="#bfa37e" stroke-width="1.1" stroke-linecap="round"/>
+              <path d="M12 22 C 8 20, 7 15, 10 13 C 13 16, 13 20, 12 22 Z" fill="rgba(196, 175, 150, 0.5)" stroke="#bfa37e" stroke-width="0.6"/>
+              <path d="M16 18 C 14 12, 18 8, 23 9 C 27 10, 26 16, 21 19 Z" fill="rgba(242, 202, 207, 0.95)" stroke="#c48b92" stroke-width="0.7"/>
+              <path d="M19 14 C 19 10, 23 9, 24 12" stroke="#d4af37" stroke-width="0.7" fill="none"/>
+            </svg>
+          </div>
+
+          <!-- Flower L3: Floating Blossom -->
+          <div class="drifting-flower drifting-flower--l3">
+            <svg class="flower-svg" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="14" r="8" fill="rgba(252, 238, 240, 0.95)" stroke="#d4af37" stroke-width="0.7"/>
+              <path d="M8 12 C 8 7, 14 7, 16 11 C 20 7, 22 13, 20 17 C 21 21, 16 22, 14 20 C 11 22, 7 19, 8 15 Z" fill="rgba(235, 185, 192, 0.9)" stroke="#b86b74" stroke-width="0.5"/>
+              <circle cx="14" cy="14" r="2" fill="#d4af37"/>
+            </svg>
+          </div>
+
+          <!-- Flower L4: Soft Petals -->
+          <div class="drifting-flower drifting-flower--l4">
+            <svg class="flower-svg" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 C 17 6, 20 12, 16 18 C 12 22, 5 20, 3 14 C 2 8, 7 3, 12 2 Z" fill="rgba(245, 210, 215, 0.92)" stroke="#d4af37" stroke-width="0.6"/>
+              <path d="M12 5 C 13 10, 12 15, 8 18" stroke="rgba(255, 255, 255, 0.8)" stroke-width="0.6" fill="none"/>
+            </svg>
+          </div>
+
+          <!-- Flower L5: Mini Bud -->
+          <div class="drifting-flower drifting-flower--l5">
+            <svg class="flower-svg" viewBox="0 0 26 26" fill="none">
+              <path d="M13 14 C 11 9, 15 6, 19 7 C 22 8, 21 13, 17 15 Z" fill="rgba(242, 202, 207, 0.95)" stroke="#c48b92" stroke-width="0.6"/>
+              <path d="M8 22 C 11 19, 13 16, 15 13" stroke="#bfa37e" stroke-width="0.9" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Floating Delicate Flowers on RIGHT side -->
+        <div class="gallery-flock gallery-flock--right" aria-hidden="true">
+          <!-- Flower R1: Rosebud with Stem -->
+          <div class="drifting-flower drifting-flower--r1">
+            <svg class="flower-svg" viewBox="0 0 32 32" fill="none">
+              <path d="M24 28 C 20 24, 17 20, 14 16" stroke="#bfa37e" stroke-width="1.1" stroke-linecap="round"/>
+              <path d="M20 22 C 24 20, 25 15, 22 13 C 19 16, 19 20, 20 22 Z" fill="rgba(196, 175, 150, 0.5)" stroke="#bfa37e" stroke-width="0.6"/>
+              <path d="M16 18 C 18 12, 14 8, 9 9 C 5 10, 6 16, 11 19 Z" fill="rgba(242, 202, 207, 0.95)" stroke="#c48b92" stroke-width="0.7"/>
+              <path d="M13 14 C 13 10, 9 9, 8 12" stroke="#d4af37" stroke-width="0.7" fill="none"/>
+            </svg>
+          </div>
+
+          <!-- Flower R2: Blooming Rose -->
+          <div class="drifting-flower drifting-flower--r2">
+            <svg class="flower-svg" viewBox="0 0 36 36" fill="none">
+              <path d="M26 24 C 32 23, 34 17, 30 12 C 25 15, 24 21, 26 24 Z" fill="rgba(196, 175, 150, 0.55)" stroke="#bfa37e" stroke-width="0.6"/>
+              <circle cx="18" cy="18" r="11" fill="rgba(252, 236, 238, 0.95)" stroke="#d4af37" stroke-width="0.8"/>
+              <path d="M12 16 C 11 10, 19 9, 21 14 C 25 10, 28 16, 26 20 C 28 25, 22 28, 19 25 C 14 28, 10 23, 12 19 Z" fill="rgba(240, 198, 203, 0.92)" stroke="#c48b92" stroke-width="0.6"/>
+              <path d="M15 17 C 15 14, 21 14, 21 17 C 21 20, 17 21, 17 19 C 17 18, 19 18, 19 17" stroke="#8b3a44" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+              <circle cx="18" cy="18" r="1.8" fill="#d4af37"/>
+            </svg>
+          </div>
+
+          <!-- Flower R3: Soft Petals -->
+          <div class="drifting-flower drifting-flower--r3">
+            <svg class="flower-svg" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2 C 17 6, 20 12, 16 18 C 12 22, 5 20, 3 14 C 2 8, 7 3, 12 2 Z" fill="rgba(245, 210, 215, 0.92)" stroke="#d4af37" stroke-width="0.6"/>
+              <path d="M12 5 C 13 10, 12 15, 8 18" stroke="rgba(255, 255, 255, 0.8)" stroke-width="0.6" fill="none"/>
+            </svg>
+          </div>
+
+          <!-- Flower R4: Floating Blossom -->
+          <div class="drifting-flower drifting-flower--r4">
+            <svg class="flower-svg" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="14" r="8" fill="rgba(252, 238, 240, 0.95)" stroke="#d4af37" stroke-width="0.7"/>
+              <path d="M8 12 C 8 7, 14 7, 16 11 C 20 7, 22 13, 20 17 C 21 21, 16 22, 14 20 C 11 22, 7 19, 8 15 Z" fill="rgba(235, 185, 192, 0.9)" stroke="#b86b74" stroke-width="0.5"/>
+              <circle cx="14" cy="14" r="2" fill="#d4af37"/>
+            </svg>
+          </div>
+
+          <!-- Flower R5: Mini Bud -->
+          <div class="drifting-flower drifting-flower--r5">
+            <svg class="flower-svg" viewBox="0 0 26 26" fill="none">
+              <path d="M13 14 C 15 9, 11 6, 7 7 C 4 8, 5 13, 9 15 Z" fill="rgba(242, 202, 207, 0.95)" stroke="#c48b92" stroke-width="0.6"/>
+              <path d="M18 22 C 15 19, 13 16, 11 13" stroke="#bfa37e" stroke-width="0.9" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Main Showcase Card with 3D Tilt & Glassmorphism -->
+        <div class="gallery-card" @mouseenter="pauseAutoplay" @mouseleave="startAutoplay">
         <!-- Floating sparkle particles -->
         <div class="gallery-card__sparkles">
           <span v-for="n in 6" :key="n" class="card-sparkle" :style="sparkleStyle(n)">✦</span>
@@ -91,6 +306,7 @@
           </button>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- Fullscreen Romantic Lightbox Modal -->
@@ -121,34 +337,27 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 import deblaImg from '@/assets/images/debla.jpg'
-import handImg from '@/assets/images/hand.jpg'
 import hand1Img from '@/assets/images/hand1.jpg'
 import personImg from '@/assets/images/person.jpg'
 
 const photos = [
   {
     src: deblaImg,
-    tag: 'The Rings · دبلة الخطوبة',
-    title: 'The Eternal Promise',
-    caption: 'With this ring, our forever begins — رمز المحبة والعهد الأبدي',
-  },
-  {
-    src: handImg,
-    tag: 'Together · يداً بيد',
-    title: 'Walking Hand in Hand',
-    caption: 'Two souls joined on a journey of a lifetime — خطوة بخطوة نحو الغد',
+    tag: 'Blessing · دعاء وبركة',
+    title: 'A Blessed Beginning',
+    caption: 'على كتاب الله وسُنة رسوله، دعوات ترعى بداية حكايتنا — In faith and prayers, our journey begins',
   },
   {
     src: hand1Img,
-    tag: 'Harmony · قلوب مؤتلفة',
-    title: 'A Touch of Grace',
-    caption: 'Every beat of our hearts tells our story — أجمل الحكايات تُروى معاً',
+    tag: 'Together · فرحة العمر',
+    title: 'Bahaa & Eman',
+    caption: 'ابتسامة العمر وفرحة تكتمل بكم.. معاً نحو غدٍ أجمل — Two hearts radiating love and everlasting joy',
   },
   {
     src: personImg,
-    tag: 'Cherished · نظرة من القلب',
-    title: 'In Your Eyes, Home',
-    caption: 'Pure warmth, boundless smiles, and shared joy — الفرحة تكتمل بكم',
+    tag: 'The Rings · عهد المحبة',
+    title: 'اليوم وغدًا وإلى الأبد',
+    caption: 'رمز العهد والميثاق وتاريخ محفور في الوجدان (14/8/2026) — Today, tomorrow, and forever together',
   },
 ]
 
@@ -223,6 +432,21 @@ function sparkleStyle(n) {
   }
 }
 
+function petalStyle(p) {
+  const lefts = [6, 88, 12, 85, 4, 92]
+  const tops = [14, 22, 58, 72, 42, 86]
+  const delays = [0, 1.8, 3.2, 0.9, 2.4, 4.1]
+  const durations = [6.5, 7.2, 8, 6.8, 7.5, 8.5]
+  const scales = [0.85, 1.1, 0.75, 1, 0.9, 0.8]
+  return {
+    left: `${lefts[(p - 1) % lefts.length]}%`,
+    top: `${tops[(p - 1) % tops.length]}%`,
+    animationDelay: `${delays[(p - 1) % delays.length]}s`,
+    animationDuration: `${durations[(p - 1) % durations.length]}s`,
+    transform: `scale(${scales[(p - 1) % scales.length]})`,
+  }
+}
+
 onMounted(() => {
   startAutoplay()
 })
@@ -276,6 +500,233 @@ onUnmounted(() => {
   height: 18px;
   margin: 0 auto;
   color: var(--color-gold);
+}
+
+/* ── Floating Flower Petals ── */
+.gallery-petals {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.gallery-petal {
+  position: absolute;
+  animation: petalSwayFloat ease-in-out infinite alternate;
+  opacity: 0.65;
+  filter: drop-shadow(0 2px 4px rgba(74, 20, 26, 0.1));
+}
+
+@keyframes petalSwayFloat {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateY(-24px) rotate(25deg);
+    opacity: 0.4;
+  }
+}
+
+/* ── Card Wrapper & Delicate Corner Florals ── */
+.gallery-card-wrapper {
+  position: relative;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.gallery-floral {
+  position: absolute;
+  width: 66px;
+  height: 66px;
+  pointer-events: none;
+  z-index: 20;
+  filter: drop-shadow(0 3px 8px rgba(74, 20, 26, 0.28));
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-floral--tl {
+  top: -14px;
+  left: -14px;
+}
+
+.gallery-floral--tr {
+  top: -14px;
+  right: -14px;
+  transform: scaleX(-1);
+}
+
+.gallery-floral--bl {
+  bottom: -14px;
+  left: -14px;
+  transform: scaleY(-1);
+}
+
+.gallery-floral--br {
+  bottom: -14px;
+  right: -14px;
+  transform: scale(-1);
+}
+
+.gallery-card-wrapper:hover .gallery-floral--tl {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.gallery-card-wrapper:hover .gallery-floral--tr {
+  transform: scaleX(-1) scale(1.08) rotate(3deg);
+}
+
+.gallery-card-wrapper:hover .gallery-floral--bl {
+  transform: scaleY(-1) scale(1.08) rotate(3deg);
+}
+
+.gallery-card-wrapper:hover .gallery-floral--br {
+  transform: scale(-1) scale(1.08) rotate(-3deg);
+}
+
+/* ── Side Drifting Flowers (الأجناب) ── */
+.gallery-flock {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  pointer-events: none;
+  z-index: 25;
+}
+
+.gallery-flock--left {
+  left: -22px;
+}
+
+.gallery-flock--right {
+  right: -22px;
+}
+
+@media (min-width: 480px) {
+  .gallery-flock--left {
+    left: -40px;
+    width: 56px;
+  }
+  .gallery-flock--right {
+    right: -40px;
+    width: 56px;
+  }
+}
+
+.drifting-flower {
+  position: absolute;
+  filter: drop-shadow(0 3px 6px rgba(74, 20, 26, 0.24));
+  transition: transform 0.4s ease;
+}
+
+.flower-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Left Side Flower Placements */
+.drifting-flower--l1 {
+  top: 8%;
+  left: 6px;
+  width: 32px;
+  height: 32px;
+  animation: floatDrift1 5.2s ease-in-out infinite alternate;
+}
+
+.drifting-flower--l2 {
+  top: 28%;
+  left: -4px;
+  width: 28px;
+  height: 28px;
+  animation: floatDrift2 6s ease-in-out infinite alternate 0.8s;
+}
+
+.drifting-flower--l3 {
+  top: 49%;
+  left: 8px;
+  width: 26px;
+  height: 26px;
+  animation: floatDrift3 5.5s ease-in-out infinite alternate 1.6s;
+}
+
+.drifting-flower--l4 {
+  top: 69%;
+  left: -2px;
+  width: 24px;
+  height: 24px;
+  animation: floatDrift1 6.3s ease-in-out infinite alternate 2.4s;
+}
+
+.drifting-flower--l5 {
+  top: 88%;
+  left: 6px;
+  width: 27px;
+  height: 27px;
+  animation: floatDrift2 5.8s ease-in-out infinite alternate 1.2s;
+}
+
+/* Right Side Flower Placements */
+.drifting-flower--r1 {
+  top: 12%;
+  right: -4px;
+  width: 28px;
+  height: 28px;
+  animation: floatDrift2 5.6s ease-in-out infinite alternate 0.5s;
+}
+
+.drifting-flower--r2 {
+  top: 32%;
+  right: 6px;
+  width: 33px;
+  height: 33px;
+  animation: floatDrift1 5s ease-in-out infinite alternate 1.4s;
+}
+
+.drifting-flower--r3 {
+  top: 52%;
+  right: -6px;
+  width: 24px;
+  height: 24px;
+  animation: floatDrift3 6.2s ease-in-out infinite alternate 2s;
+}
+
+.drifting-flower--r4 {
+  top: 72%;
+  right: 8px;
+  width: 27px;
+  height: 27px;
+  animation: floatDrift2 5.4s ease-in-out infinite alternate 0.9s;
+}
+
+.drifting-flower--r5 {
+  top: 89%;
+  right: -2px;
+  width: 28px;
+  height: 28px;
+  animation: floatDrift1 6s ease-in-out infinite alternate 2.7s;
+}
+
+@keyframes floatDrift1 {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  50%  { transform: translateY(-12px) translateX(4px) rotate(8deg) scale(1.05); }
+  100% { transform: translateY(-22px) translateX(-3px) rotate(-6deg) scale(0.98); }
+}
+
+@keyframes floatDrift2 {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg) scale(0.96); }
+  50%  { transform: translateY(-15px) translateX(-5px) rotate(-10deg) scale(1.04); }
+  100% { transform: translateY(-26px) translateX(3px) rotate(7deg) scale(1); }
+}
+
+@keyframes floatDrift3 {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg) scale(1); }
+  50%  { transform: translateY(-13px) translateX(6px) rotate(12deg) scale(1.06); }
+  100% { transform: translateY(-24px) translateX(-4px) rotate(-8deg) scale(0.97); }
 }
 
 /* ── Main Showcase Card ── */
@@ -471,8 +922,8 @@ onUnmounted(() => {
 /* Thumbnails Strip */
 .gallery-thumbs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.55rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
   position: relative;
   z-index: 2;
 }

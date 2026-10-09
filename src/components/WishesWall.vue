@@ -205,7 +205,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 // Storage key v3 to clean old dummy data
 const STORAGE_KEY = 'bahaa_eman_guestbook_wishes_v3'
@@ -236,40 +236,46 @@ const formMessage = ref('')
 const selectedStamp = ref('💍')
 
 const displayedWishes = computed(() => {
-  if (showAll.value) return wishesList.value
-  return wishesList.value.slice(0, 4)
+  if (showAll.value || wishesList.value.length <= 6) return wishesList.value
+  return wishesList.value.slice(0, 5)
 })
 
 function loadWishes() {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      const parsed = JSON.parse(saved)
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        // Ensure couple card is always present at index 0
-        const hasCouple = parsed.some(w => w.id === 'couple-message')
-        if (!hasCouple) {
-          wishesList.value = [defaultWishes[0], ...parsed]
-        } else {
-          wishesList.value = parsed
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const saved = window.localStorage.getItem(STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Preserve all guest wishes and ensure couple card is always at index 0
+          const guestWishes = parsed.filter(w => w.id !== 'couple-message' && !w.isCouple)
+          wishesList.value = [defaultWishes[0], ...guestWishes]
+          return
         }
-      } else {
-        wishesList.value = defaultWishes
-        saveWishes()
       }
-    } else {
-      wishesList.value = defaultWishes
-      saveWishes()
     }
+    wishesList.value = [...defaultWishes]
+    saveWishes()
   } catch (e) {
-    wishesList.value = defaultWishes
+    console.warn('Error reading from localStorage:', e)
+    wishesList.value = [...defaultWishes]
   }
 }
 
 function saveWishes() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(wishesList.value))
-  } catch (e) {}
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(wishesList.value))
+    }
+  } catch (e) {
+    console.warn('Error writing to localStorage:', e)
+  }
+}
+
+function handleStorageChange(event) {
+  if (event.key === STORAGE_KEY) {
+    loadWishes()
+  }
 }
 
 function openForm() {
@@ -341,6 +347,15 @@ function heartBurstStyle(n) {
 
 onMounted(() => {
   loadWishes()
+  if (typeof window !== 'undefined') {
+    window.addEventListener('storage', handleStorageChange)
+  }
+})
+
+onUnmounted(() => {
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('storage', handleStorageChange)
+  }
 })
 </script>
 

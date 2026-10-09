@@ -49,7 +49,7 @@
               <span class="div-line"></span>
             </div>
             <p class="envelope__card-date">23 · 10 · 2026</p>
-            <p class="envelope__card-day">Friday Evening</p>
+            <p class="envelope__card-day">Friday Evening · 7:00 PM</p>
           </div>
         </div>
       </div>
@@ -454,11 +454,20 @@ function openEnvelope() {
 }
 .envelope__card-day {
   font-family: var(--font-sans);
-  font-size: 0.55rem;
-  letter-spacing: 0.3em;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-gold-dark);
+  color: var(--color-navy);
+  font-weight: 600;
   margin-top: 0.25rem;
+}
+.envelope__card-time-ar {
+  font-family: var(--font-sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.05em;
+  color: var(--color-gold-dark);
+  font-weight: 600;
+  margin-top: 0.15rem;
 }
 
 /* ── WAX SEAL ── */

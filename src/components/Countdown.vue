@@ -40,7 +40,8 @@
         </div>
       </div>
 
-      <p class="countdown__date-label">Friday, October 23, 2026</p>
+      <!-- <p class="countdown__date-label">Friday</p> -->
+
     </div>
   </section>
 </template>
@@ -48,7 +49,8 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const targetDate = new Date('2026-10-23T19:00:00').getTime()
+// Target date: October 23, 2026 at 7:00 PM (19:00)
+const targetDate = new Date(2026, 9, 23, 19, 0, 0).getTime()
 
 const days = ref('00')
 const hours = ref('00')
@@ -205,10 +207,20 @@ onUnmounted(() => {
 
 .countdown__date-label {
   font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 0.9rem;
-  color: var(--color-navy-light);
-  margin-top: 2.5rem;
-  opacity: 0.6;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-navy);
+  margin-top: 2.2rem;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.countdown__time-label-ar {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-gold-dark);
+  margin-top: 0.35rem;
+  letter-spacing: 0.04em;
 }
 </style>
