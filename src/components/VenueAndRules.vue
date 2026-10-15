@@ -150,7 +150,8 @@ import qrCodeImg from '@/assets/images/qr-code.png'
 import QRCode from 'qrcode'
 
 const isFlipped = ref(false)
-const mapLocationUrl = 'https://maps.app.goo.gl/Jv6Bmiv6MFimiugMA?g_st=iw'
+const mapLocationUrl = 'https://maps.app.goo.gl/LfGTCdSfMq8Skc9M9?g_st=ic'
+const qrCodeUrl = 'https://maps.app.goo.gl/LfGTCdSfMq8Skc9M9?g_st=ic'
 const qrCodeDataUrl = ref(qrCodeImg)
 
 // Center coordinates for Cicada Hall - Armed Forces Club (Zamalek, Cairo)
@@ -159,7 +160,7 @@ const mapEmbedUrl = 'https://www.openstreetmap.org/export/embed.html?bbox=31.212
 
 onMounted(async () => {
   try {
-    qrCodeDataUrl.value = await QRCode.toDataURL(mapLocationUrl, {
+    qrCodeDataUrl.value = await QRCode.toDataURL(qrCodeUrl, {
       color: { dark: '#4a141aff', light: '#fbf8f5ff' },
       width: 400,
       margin: 2
