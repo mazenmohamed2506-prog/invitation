@@ -186,8 +186,8 @@
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="wishes-modal__submit" :disabled="!formName.trim() || !formMessage.trim()">
-              <span>مشاركة كلمتك معنا</span>
+            <button type="submit" class="wishes-modal__submit" :disabled="!formName.trim() || !formMessage.trim() || isSubmitting">
+              <span>{{ isSubmitting ? 'جاري المشاركة...' : 'مشاركة كلمتك معنا' }}</span>
               <span class="wishes-modal__submit-gem">💍✨</span>
             </button>
           </form>
@@ -206,75 +206,95 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-
-// Storage key v3 to clean old dummy data
-const STORAGE_KEY = 'bahaa_eman_guestbook_wishes_v3'
+import { db } from '../firebase'
+import {
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  serverTimestamp,
+  updateDoc,
+  doc,
+  increment
+} from 'firebase/firestore'
 
 const stamps = ['💍', '💖', '🌸', '✨', '🥂', '💌', '🕊️']
 
-// ONLY ONE initial card: Special message from Bahaa & Eman!
-const defaultWishes = [
-  {
-    id: 'couple-message',
-    name: 'بهاء & إيمان',
-    isCouple: true,
-    stamp: '💍',
-    message: 'فرحتنا لا تكتمل إلا بوجودكم ومشاركتكم لنا أجمل لحظات العمر.. دعواتكم وكلماتكم الصادقة هي أغلى هدية نستهل بها بداية رحلتنا معاً. ننتظركم بكل حب وشوق لنحتفل معاً في ليلتنا المميزة ❤️✨',
-    date: 'من القلب · With All Our Love',
-    likes: 18,
-    liked: false,
-  }
-]
+// بطاقة العروسين الثابتة في أعلى الدفتر
+const coupleCard = {
+  id: 'couple-message',
+  name: 'بهاء & إيمان',
+  isCouple: true,
+  stamp: '💍',
+  message: 'فرحتنا لا تكتمل إلا بوجودكم ومشاركتكم لنا أجمل لحظات العمر.. دعواتكم وكلماتكم الصادقة هي أغلى هدية نستهل بها بداية رحلتنا معاً. ننتظركم بكل حب وشوق لنحتفل معاً في ليلتنا المميزة ❤️✨',
+  date: 'من القلب · With All Our Love',
+  likes: 18,
+  liked: false,
+}
 
-const wishesList = ref([])
+const wishesList = ref([coupleCard])
 const isFormOpen = ref(false)
 const showAll = ref(false)
 const showHeartsBurst = ref(false)
+const isSubmitting = ref(false)
 
 const formName = ref('')
 const formMessage = ref('')
 const selectedStamp = ref('💍')
+
+// تتبع الإعجابات الحالية للمستخدم
+const likedWishIds = ref([])
+let unsubscribeFirestore = null
 
 const displayedWishes = computed(() => {
   if (showAll.value || wishesList.value.length <= 6) return wishesList.value
   return wishesList.value.slice(0, 5)
 })
 
-function loadWishes() {
+function formatFirebaseDate(timestamp) {
+  if (!timestamp) return 'الآن'
   try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const saved = window.localStorage.getItem(STORAGE_KEY)
-      if (saved) {
-        const parsed = JSON.parse(saved)
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // Preserve all guest wishes and ensure couple card is always at index 0
-          const guestWishes = parsed.filter(w => w.id !== 'couple-message' && !w.isCouple)
-          wishesList.value = [defaultWishes[0], ...guestWishes]
-          return
-        }
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp)
+    const hours = date.getHours() % 12 || 12
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+    const period = date.getHours() >= 12 ? 'م' : 'ص'
+    return `${hours}:${minutes} ${period}`
+  } catch {
+    return 'الآن'
+  }
+}
+
+// استماع لحظي للرسائل من Firestore
+function subscribeToWishes() {
+  try {
+    const wishesQuery = query(collection(db, 'wishes'), orderBy('createdAt', 'desc'))
+    unsubscribeFirestore = onSnapshot(
+      wishesQuery,
+      (snapshot) => {
+        const remoteWishes = snapshot.docs.map((docSnap) => {
+          const data = docSnap.data()
+          return {
+            id: docSnap.id,
+            name: data.name || '',
+            message: data.message || '',
+            stamp: data.stamp || '💍',
+            likes: typeof data.likes === 'number' ? data.likes : 0,
+            liked: likedWishIds.value.includes(docSnap.id),
+            date: formatFirebaseDate(data.createdAt),
+            isCouple: false,
+          }
+        })
+
+        // وضع بطاقة العروسين دائماً في المقدمة
+        wishesList.value = [coupleCard, ...remoteWishes]
+      },
+      (error) => {
+        console.error('Error fetching wishes from Firestore:', error)
       }
-    }
-    wishesList.value = [...defaultWishes]
-    saveWishes()
-  } catch (e) {
-    console.warn('Error reading from localStorage:', e)
-    wishesList.value = [...defaultWishes]
-  }
-}
-
-function saveWishes() {
-  try {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(wishesList.value))
-    }
-  } catch (e) {
-    console.warn('Error writing to localStorage:', e)
-  }
-}
-
-function handleStorageChange(event) {
-  if (event.key === STORAGE_KEY) {
-    loadWishes()
+    )
+  } catch (err) {
+    console.error('Firestore subscription error:', err)
   }
 }
 
@@ -286,50 +306,75 @@ function closeForm() {
   isFormOpen.value = false
 }
 
-function submitWish() {
-  if (!formName.value.trim() || !formMessage.value.trim()) return
+// إضافة أمنية جديدة في Firestore
+async function submitWish() {
+  const name = formName.value.trim()
+  const message = formMessage.value.trim()
+  if (!name || !message || isSubmitting.value) return
 
-  const now = new Date()
-  const hours = now.getHours() % 12 || 12
-  const minutes = String(now.getMinutes()).padStart(2, '0')
-  const period = now.getHours() >= 12 ? 'م' : 'ص'
-  const timeStr = `الآن · ${hours}:${minutes} ${period}`
+  isSubmitting.value = true
 
-  const newWish = {
-    id: Date.now(),
-    name: formName.value.trim(),
-    stamp: selectedStamp.value,
-    message: formMessage.value.trim(),
-    date: timeStr,
-    likes: 1,
-    liked: true,
+  try {
+    const docRef = await addDoc(collection(db, 'wishes'), {
+      name,
+      message,
+      stamp: selectedStamp.value,
+      likes: 1,
+      createdAt: serverTimestamp(),
+    })
+
+    if (!likedWishIds.value.includes(docRef.id)) {
+      likedWishIds.value.push(docRef.id)
+    }
+
+    // تصفير وإغلاق النموذج
+    formName.value = ''
+    formMessage.value = ''
+    selectedStamp.value = '💍'
+    closeForm()
+
+    // تشغيل أنيميشن القلوب والاحتفال
+    showHeartsBurst.value = true
+    setTimeout(() => {
+      showHeartsBurst.value = false
+    }, 2200)
+  } catch (error) {
+    console.error('Error adding wish to Firestore:', error)
+    alert('حدث خطأ أثناء إرسال رسالتك، يرجى المحاولة مرة أخرى.')
+  } finally {
+    isSubmitting.value = false
   }
-
-  // Insert right after the pinned couple's card so the couple's card remains at the very top!
-  if (wishesList.value.length > 0 && wishesList.value[0].isCouple) {
-    wishesList.value.splice(1, 0, newWish)
-  } else {
-    wishesList.value.unshift(newWish)
-  }
-  saveWishes()
-
-  // Reset form
-  formName.value = ''
-  formMessage.value = ''
-  selectedStamp.value = '💍'
-  closeForm()
-
-  // Trigger celebration burst
-  showHeartsBurst.value = true
-  setTimeout(() => {
-    showHeartsBurst.value = false
-  }, 2200)
 }
 
-function toggleLike(wish) {
-  wish.liked = !wish.liked
-  wish.likes = (wish.likes || 0) + (wish.liked ? 1 : -1)
-  saveWishes()
+// التفاعل مع الإعجاب
+async function toggleLike(wish) {
+  if (wish.id === 'couple-message') {
+    wish.liked = !wish.liked
+    wish.likes = (wish.likes || 0) + (wish.liked ? 1 : -1)
+    return
+  }
+
+  const isLiked = likedWishIds.value.includes(wish.id)
+  const delta = isLiked ? -1 : 1
+
+  // تحديث مباشر للواجهة
+  wish.liked = !isLiked
+  wish.likes = Math.max(0, (wish.likes || 0) + delta)
+
+  if (wish.liked) {
+    likedWishIds.value.push(wish.id)
+  } else {
+    likedWishIds.value = likedWishIds.value.filter((id) => id !== wish.id)
+  }
+
+  try {
+    const wishRef = doc(db, 'wishes', wish.id)
+    await updateDoc(wishRef, {
+      likes: increment(delta),
+    })
+  } catch (err) {
+    console.error('Error updating likes in Firestore:', err)
+  }
 }
 
 function heartBurstStyle(n) {
@@ -346,15 +391,12 @@ function heartBurstStyle(n) {
 }
 
 onMounted(() => {
-  loadWishes()
-  if (typeof window !== 'undefined') {
-    window.addEventListener('storage', handleStorageChange)
-  }
+  subscribeToWishes()
 })
 
 onUnmounted(() => {
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('storage', handleStorageChange)
+  if (unsubscribeFirestore) {
+    unsubscribeFirestore()
   }
 })
 </script>
